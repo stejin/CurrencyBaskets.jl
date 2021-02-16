@@ -8,7 +8,10 @@ function Base.promote_rule(
 end
 
 # Convert to basket
-Base.convert(::Type{Basket}, m::AbstractMonetary) = Basket((m,))
+# FIXED: Causes stack overflow because Basket derives from AbstractMonetary
+#        Attempts to create Basket from Basket instead of constituents
+# Base.convert(::Type{Basket}, m::AbstractMonetary) = Basket((m,))
+Base.convert(::Type{Basket}, m::Monetary) = Basket((m,))
 
 # Convert to Monetary
 function Base.convert(::Type{T}, b::Basket) where T<:Monetary
